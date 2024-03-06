@@ -1,23 +1,28 @@
-import { useEffect, useState } from "react"
-import { mFetch } from "../../listProducts/listProducts"
+import React, { useEffect, useState } from "react";
+import { useFetchProducts } from "./products";
+import './ItemListCon.css';
+import Item from "../Item/Item";
 
-export const ItemListConstainer = ({ greeting }) => {
-    const [productos, setProductos] = useState([])
-
-    useEffect(() => {
-        mFetch()
-            .then(products => setProductos(products))
-            .catch(err => console.log(err))
-    }, [])
-
+const ItemListContainer = () => {
+    // Obtenemos los productos utilizando el hook useFetchProducts
+    const productos = useFetchProducts();
+    console.log(productos)
     return (
         <div>
-            <h2 className="text-center">{greeting}</h2>
-            <ul>
-                {productos.map((producto) => (
-                    <li key={producto.id}>{producto.name}</li>
+            <h1>Estamos aca</h1>
+            <section className="ItemListCon_section">
+                {productos.map((prod) => (      
+                    <article key={prod.id}>
+                        <h3>{prod.title}</h3>
+                        <img src={prod.thumbnail} alt={prod.title} />
+                        <p>{prod.price}</p>
+                        <p>El id del producto es: {prod.id}</p>
+                        <Item /> 
+                    </article>
                 ))}
-            </ul>
+            </section>
         </div>
-    ) 
-}
+    );
+};
+
+export default ItemListContainer;
