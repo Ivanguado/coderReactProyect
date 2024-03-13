@@ -1,53 +1,51 @@
-// Importamos los hooks useEffect y useState de React
+import React from 'react';
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useFetchProducts } from "../ItemListContainer/products.js";
 
-// Creamos el componente funcional ItemDetailContainer
+
 const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
     const { productId } = useParams();
-    const productos = useFetchProducts();
-
-    const getProductById = (productId) => {
-        console.log("Pedimos los productos para sacar el id")
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // Utiliza la función find para buscar el producto con el ID especificado
-                const product = productos.find(prod => prod.id === productId);
-                // Devuelve el producto encontrado
-                resolve(product);
-            }, 1000);
-        });
-    }
 
     useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response = await getProductById(productId);
-                setProduct(response);
-            } catch (error) {
-                console.error("Error fetching product:", error);
-            }
-        };
-
-        fetchProduct();
-    }, [productId]);
+        fetch(`https://api.mercadolibre.com/items/${productId}`)
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
+            .then((data) => {
+                // Verificar si se encontró el producto
+                if (data) {
+                    console.log('Producto encontrado:', data);
+                    setProduct(data); // Establecer el producto encontrado en el estado
+                } else {
+                    console.log('Producto no encontrado');
+                    throw new Error('Producto no encontrado');
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error);
+            });
+    }, [productId]); // Dependencia: el efecto se ejecutará cuando cambie el productId
 
     return (
         <div>
-            <h1>Detalle</h1>
-            {/* Mostramos los detalles del producto */}
-            {product && (
-                <div>
-                    <h2>{product.name}</h2>
-                    <p>Precio: {product.price}</p>
-                    <p>Descripción: {product.description}</p>
-                </div>
+        <h1>Detalle</h1>
+        <div>
+            {product ? (
+                <React.Fragment>
+                    <h2>Nombre del producto: {product.title}</h2>
+                    <p>Precio {product.price}</p>
+                </React.Fragment>
+            ) : (
+                <p>Cargando...</p>
             )}
         </div>
+    </div>
+    
     );
 }
 
-// Exportamos el componente ItemDetailContainer para que pueda ser utilizado en otros módulos
 export default ItemDetailContainer;

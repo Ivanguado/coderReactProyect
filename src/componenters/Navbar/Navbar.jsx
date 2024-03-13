@@ -1,12 +1,20 @@
 import './NavbarStyle.css'; // Importamos los estilos CSS para el Navbar
 import { Link } from 'react-router-dom'; // Importamos el componente Link de react-router-dom
+import { CartWidget } from '../CartWidget/CartWidger';
 
-// Importamos las imágenes de los iconos para el Navbar
-import cartImage from '../../assets/img/cart.png';
 import homeImage from '../../assets/img/home.png';
 
+import { useContext } from 'react';
+
+import { AppContext } from '../../App';
+
+
+
 // Componente funcional NavBar
-const NavBar = () => {
+const NavBar = (category_Id) => {
+    const value = useContext(AppContext);
+    console.log(value);
+    
     return(
         <>
             
@@ -21,30 +29,19 @@ const NavBar = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
                 {/* Menú desplegable */}
-                <div className="collapse navbar-collapse" id="navbarScroll">
-                    <ul className="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style={{ '--bs-scroll-height': '100px' }}>
-                        {/* Enlaces de navegación */}
-                        <li className="nav-item">
-                            <a className="nav-link active index_nav-a" aria-current="page" href="./folders/know_more.html">PRODUCTOS</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link active index_nav-a" aria-current="page" href="./folders/service.html">CONTACTO</a>
-                        </li>
-                    </ul>
-                </div>
-                {/* Icono del carrito de compras */}
-                <a className="navbar-brand" href="../index.html">
-                    <img className="header--img" src={cartImage} alt="RIG -Desing-" />
-                </a>
-            </header>
-            {/* Menú de navegación con enlaces a diferentes categorías */}
-            <nav>
-                <section>
-                    <Link to="/category/proteina"> Proteinas </Link>
-                    <Link to="/category/creatina"> Creatina </Link>
-                    <Link to="/category/aminoacido"> Aminoacidos </Link>
+                <nav>
+                <section className="collapse navbar-collapse" id="navbarScroll">
+                    <Link to="/category/Proteínas"> Proteinas </Link>
+                    <Link to="/category/Magnesio"> Magnesio </Link>
+                    <Link to="/category/Creatina"> Creatina </Link>
+                    <Link to="/category/Vitamina"> Vitamina </Link>
+                    <Link to="/category/Glutamina"> Glutamina </Link>
                 </section>
             </nav>
+                 {/* Menú de navegación con enlaces a diferentes categorías */}
+                 <CartWidget/>
+            </header>
+           
         </>
     )
 }
