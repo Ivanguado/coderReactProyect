@@ -63,7 +63,7 @@ const ItemDetailContainer = () => {
                        {isInCart(product.id) ? (
                        <Link to="/cart">Ir al carrito</Link>
                        ) : (
-                       <ItemCount onAdd={handleAdd} />
+                       <ItemCount onAdd={handleAdd} stock={product.initial_quantity}/>
                        )}
                        </footer>
                 </React.Fragment>
