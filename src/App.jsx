@@ -10,15 +10,36 @@ import { BrowserRouter, Routes, Route} from 'react-router-dom';
 
 import Prueba from './componenters/Prueba/Prueba';
 
-export const AppContext = createContext();
+export const CartContext = createContext();
+
 
 function App() {
   const [count, setCount] = useState(0)
+  const [cart, setCart] = useState([]);
 
-  return (
+/*sumar productos al carrito*/
+const addItem = (productToAdd) => {
+  if(!isInCart(productToAdd.id)){
+    setCart( prev => [...prev, productToAdd])
+  }else{
+    console.log("El producto ya esta en el carrito");
+  }
+}
+
+const isInCart = (id) =>{
+  return cart.some(prod => prod.id === id)
+}
+
+/*Eliminar productos del carrito*/
+const removeItem = (id) => {
+  const cartUpdated = cart.filter(prod => prod.id === id);
+  setCart(cartUpdated);
+}
+
+return (
     <>
     <BrowserRouter>
-    <AppContext.Provider value={10}>
+    <CartContext.Provider value={{addItem, isInCart, removeItem}}>
       <NavBar/>
       <Routes>            
         <Route path="/" element={<ItemListContainer />} /> // Aquí podría haber una redundancia
@@ -26,7 +47,7 @@ function App() {
         <Route path="/detail/:productId" element={<ItemDetailContainer/>} />
         <Route path="*" element={<h1> :( 404 Not Found</h1>}/> // Corregido: Falta de comillas en el path
       </Routes>
-      </AppContext.Provider>
+      </CartContext.Provider>
     </BrowserRouter>
   </>
   )

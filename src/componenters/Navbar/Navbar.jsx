@@ -4,16 +4,9 @@ import { CartWidget } from '../CartWidget/CartWidger';
 
 import homeImage from '../../assets/img/home.png';
 
-import { useContext } from 'react';
-
-import { AppContext } from '../../App';
-
-
 
 // Componente funcional NavBar
 const NavBar = (category_Id) => {
-    const value = useContext(AppContext);
-    console.log(value);
     
     return(
         <>
