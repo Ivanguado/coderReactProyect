@@ -1,15 +1,21 @@
 import React from 'react';
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState} from "react";
 import { useParams, Link } from "react-router-dom";
-import { CartContext } from '../../App';
 import ItemCount from '../ItemCount/ItemCount';
+import { useCart } from '../../context/CartContext';
 
+let cantidad = 0;
 
+export const sumandoLasCantidades = (n) =>{
+    cantidad = n;
+    return n
+   
+}
 
 const ItemDetailContainer = () => {
     const [product, setProduct] = useState(null);
     const { productId } = useParams();
-    const {addItem, isInCart} = useContext(CartContext);
+    const {addItem, isInCart} = useCart();
 
     useEffect(() => {
         fetch(`https://api.mercadolibre.com/items/${productId}`)
@@ -22,7 +28,6 @@ const ItemDetailContainer = () => {
             .then((data) => {
                 // Verificar si se encontró el producto
                 if (data) {
-                    console.log('Producto encontrado:', data);
                     setProduct(data); // Establecer el producto encontrado en el estado
                 } else {
                     console.log('Producto no encontrado');
@@ -34,16 +39,19 @@ const ItemDetailContainer = () => {
             });
     }, [productId]); // Dependencia: el efecto se ejecutará cuando cambie el productId
     
+   
+    
 
-    const handleAdd = (count) => {
-        console.log("Agregar al carrito");
+    const handleAdd = () => {
         const productObj = {
          id: product.id,
          name: product.title,
          price: product.price,
-         quantity: count,
-         img: product.thumbnail
+         img: product.thumbnail,
+         category: product.category_id,
+         cantidades: cantidad
         };
+        console.log(productObj)
         addItem(productObj)
     }
 
